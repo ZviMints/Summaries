@@ -1,14 +1,16 @@
 <img src="https://media.licdn.com/dms/image/C4D0BAQGD7npMPoXymw/company-logo_200_200/0?e=2159024400&v=beta&t=TZ8Ub3U2jCZgA1_kAx6SE8jmAcSJkbiZAuN6Kn1_lW0" height="100px"> <br>
 <center>
 <b>סיכום לקורסים שנה א׳ + שנה ב׳ מדעי המחשב אוניברסיטת אריאל</b> 
-<br>
+  <hr>
   <b>שנה א</b>
   <ul>
   <li>קטעי קוד מבני נתונים</li>
   <li>בדידה - גרפים</li>
-  <li>תורת המספרים</li>
+  <li>תורת המספרים (מערכי תרגול)</li>
 </ul>
-<br>
+  <b>הערה</b>
+      ישנם מערכי תרגול לקורס מבני נתונים קיץ 2019 בחשבון הגיט שלי https://github.com/ZviMints/DataStructures_2019S
+<hr>
   <b>שנה ב</b>
 <ul>
   <li>דף נוסחאות אוטומטים</li>
@@ -25,8 +27,9 @@
   <li>C++</li>
   <li>מערכות הפעלה</li>
 </ul>  
-<br>
+<hr>
   <b>אחר</b>
 <ul>
   <li>תקציר לשפת Scala</li>
-</ul>  
+</ul>
+ צבי מינץ
