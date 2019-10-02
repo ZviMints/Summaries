@@ -8,8 +8,9 @@
   <li>בדידה - גרפים</li>
   <li>תורת המספרים (מערכי תרגול)</li>
 </ul>
-  <b>הערה</b>
-      ישנם מערכי תרגול לקורס מבני נתונים קיץ 2019 בחשבון הגיט שלי https://github.com/ZviMints/DataStructures_2019S
+  <b>הערה</b> <br>
+      ישנם מערכי תרגול לקורס מבני נתונים קיץ 2019 בחשבון הגיט שלי <br>
+  https://github.com/ZviMints/DataStructures_2019S
 <hr>
   <b>שנה ב</b>
 <ul>
