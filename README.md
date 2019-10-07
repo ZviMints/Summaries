@@ -34,6 +34,7 @@
   <b>אחר</b>
 <ul>
   <li>תקציר לשפת Scala</li>
+  <li>תקציר לMongoDB</li>
 </ul>
  <br>
  צבי מינץ
