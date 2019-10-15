@@ -36,6 +36,11 @@
   <li>תקציר לשפת Scala</li>
   <li>תקציר לMongoDB</li>
 </ul>
+  <hr>
+  <b>שנה ב</b>
+<ul>
+  <li>חישוביות</li>
+  </ul>
  <br>
  צבי מינץ
 </div>
