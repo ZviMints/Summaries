@@ -35,6 +35,8 @@
 <ul>
   <li>תקציר לשפת Scala</li>
   <li>תקציר לMongoDB</li>
+    <li>תקציר לDocker</li>
+
 </ul>
   <hr>
   <b>שנה ג</b>
