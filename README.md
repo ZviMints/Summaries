@@ -6,14 +6,14 @@
   <hr>
   <b>שנה א</b>
   <ul>
-  <li>קטעי קוד מבני נתונים</li>
   <li>בדידה - גרפים</li>
-  <li>תורת המספרים (מערכי תרגול)</li>
 </ul>
-  <b>הערה</b> <br>
+  <b>מערכי תרגול שלי</b> <br>
       ישנם מערכי תרגול לקורס מבני נתונים קיץ 2019 בחשבון הגיט שלי <br>
-  https://github.com/ZviMints/DataStructures_2019S
-<hr>
+  https://github.com/ZviMints/DataStructures_2019S <br>
+    ישנם מערכי תרגול לקורס תורת המספרים סמסטר ב׳ 2019 בחשבון הגיט שלי <br>
+https://github.com/ZviMints/Number-Theory--NT-5779B
+  <hr>
   <b>שנה ב</b>
 <ul>
   <li>דף נוסחאות אוטומטים</li>
