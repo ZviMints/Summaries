@@ -52,4 +52,4 @@ https://github.com/ZviMints/Number-Theory--NT-5779B
     <li>תקציר לDocker</li>
   <li>תקציר על Kafka & Apache & Kibana & k8s & Docker & Akka </li>
 </ul>
- צבי מינץ
+<b> צבי מינץ</b>
