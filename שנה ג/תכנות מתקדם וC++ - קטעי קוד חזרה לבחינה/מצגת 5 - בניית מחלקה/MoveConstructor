@@ -46,7 +46,7 @@ int main() {
     // In struct String:
         // String(String&& other) noexcept { printf("Moved \n"); this->data = other.data; other.data = nullptr; }
     // In struct OtherString:
-        // OtherString s("Hey"); // "Hey" -> String("Hey") -> OtherString s(String("Hey")) - do 2 allocations! instead of one!
+        // OtherString(String&& other) : data{std::move(other.data)}{ printf("OtherString - moved \n"); this->data = new char[strlen(other.data)]; }
     OtherString s2("Hey");
     /**
     Created
