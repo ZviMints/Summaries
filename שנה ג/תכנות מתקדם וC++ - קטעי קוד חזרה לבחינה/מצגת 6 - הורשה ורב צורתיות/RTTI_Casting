@@ -41,10 +41,10 @@ int main() {
     // upcasting_casting_pointer->bar(); // error
 
     // PureVirtual:
-    class Decease {
+    class Disease {
         virtual void Isolation(int) = 0;
     };
-    class Corona : Decease { virtual void Isolation(int) override { std::cout << "2 Meters" << std::endl; }};
+    class Corona : Disease { virtual void Isolation(int) override { std::cout << "2 Meters" << std::endl; }};
 
     Corona* c = new Corona();
 
