@@ -1,0 +1,22 @@
+#include <vector>
+#include <string>
+#include <iostream>
+
+/** Written By Zvi Mints - zvimints@gmail.com **/
+/** Powerpoint 5 **/
+
+template <typename /** Or class, its the same */ Type>
+Type identity(Type t) { std::cout << "In identity" << std::endl; return t;}
+
+template <typename A, typename B, typename C= decltype("Hey")>
+class MyClass {};
+
+template <> int identity<int>(int t) { std::cout << "In Template Specialization for int" << std::endl; return t;}
+int main() {
+    identity(3); // In Template Specialization for int
+    identity("ZviMints"); // In identity
+
+    MyClass<int,std::string,char> myClass;
+    MyClass<int,std::string> myClassWithDefault;
+    return 0;
+}

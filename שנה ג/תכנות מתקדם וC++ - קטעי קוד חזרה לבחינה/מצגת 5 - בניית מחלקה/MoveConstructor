@@ -1,0 +1,57 @@
+#include <vector>
+
+/** Written By Zvi Mints - zvimints@gmail.com **/
+/** Powerpoint 5 **/
+struct MoveConstructor {
+    MoveConstructor(int&& value) { printf("Move Constructor \n");
+    // 1) Initialize members ...
+    // 2) In the end of the move constructor you should make other empty, for example:
+    //    2.1) other.sz = 0; other.elem = nullptr; (MyVectorExample)
+    }
+    MoveConstructor& operator=(MoveConstructor&& other) {} // Move Assigment
+};
+
+int main() {
+
+    // R-Value appears on the right side of an assignment expression, its temporary that can not be modified
+    // L-Value appears on the left side of an assignment operator, it is a object that can be modified
+    // int& _ref = 1 + 3; // error
+    int cool_integer = 555;
+    int& _ref = cool_integer; // fine
+
+    MoveConstructor(1 + 2); // MoveConstructor
+    MoveConstructor(3); // MoveConstructor
+
+    // Why its good?
+    // Consider the following:
+    struct String {
+        char* data;
+        String() = default;
+        String(const String& other) { printf("Copied \n"); this->data = new char[strlen(other.data)]; }
+        String(const char* string) { printf("Created \n"); this->data = new char[strlen(string)]; }
+    };
+
+    struct OtherString {
+        char* data;
+        OtherString(const String& other) { printf("OtherString - Copied \n"); this->data = new char[strlen(other.data)]; }
+        OtherString(String&& other) : data{std::move(other.data)}{ printf("OtherString - moved \n"); this->data = new char[strlen(other.data)]; }
+    };
+
+
+    /**
+    Created - do new allocation
+    OtherString - Copied  - do new allocation
+    */
+    // Solving as follows:
+    // In struct String:
+        // String(String&& other) noexcept { printf("Moved \n"); this->data = other.data; other.data = nullptr; }
+    // In struct OtherString:
+        // OtherString s("Hey"); // "Hey" -> String("Hey") -> OtherString s(String("Hey")) - do 2 allocations! instead of one!
+    OtherString s2("Hey");
+    /**
+    Created
+    OtherString - moved
+    */
+
+    return 0;
+}

@@ -1,0 +1,38 @@
+#include <vector>
+#include <string>
+#include <iostream>
+
+/** Written By Zvi Mints - zvimints@gmail.com **/
+/** Powerpoint 6 **/
+
+
+struct A {
+    A() { std::cout << "A()" << std::endl; }
+    A(const A& other) { std::cout << "A(A& Other)" << std::endl; }
+    A& operator=(const A& other) { std::cout << "A(= Operator)" << std::endl; }
+    ~A() { std::cout << "~A()" << std::endl; }
+    void foo(int x = 3) { std::cout << "A foo(int)" << std::endl; }
+};
+
+
+struct B : A {
+    B() { std::cout << "B()" << std::endl; }
+    B(const B& other) { std::cout << "B(B& Other)" << std::endl; }
+    B& operator=(const B& other) { std::cout << "B(= Operator)" << std::endl; }
+    ~B() { std::cout << "~B()" << std::endl; }
+    void foo(int x = 3) { std::cout << "B foo(int)" << std::endl; }
+
+};
+
+int main() {
+    // B b; // A() B() ~B() ~A()
+    // b->foo(); // B foo(int)
+    // B* b_p = static_cast<B *>(new A()); // Compiler Error or can be solved with static_cast<B *>(new A())
+    // b_p->foo(); // B foo(int) (With static_cast)
+    // A* a_p = new A(); // A() No Destructor)
+    // a_p->foo(); // A foo(int)
+    // A* a_2_b_p = new B(); // A() B() (No Destructor)
+    // a_2_b_p->foo(); // A foo(int)
+    return 0;
+}
+

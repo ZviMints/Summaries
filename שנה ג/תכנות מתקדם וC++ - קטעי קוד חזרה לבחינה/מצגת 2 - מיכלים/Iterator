@@ -1,0 +1,76 @@
+#include <vector>
+#include <string>
+#include <iostream>
+
+/** Written By Zvi Mints - zvimints@gmail.com **/
+/** Powerpoint 2 **/
+namespace zvi {
+    template<class T>
+    class MyVector {
+        int capacity;
+        T* data;
+        int _size;
+    public:
+        MyVector() : capacity{0}, data{new T[capacity]}, _size {0} { std::cout << "Created" << std::endl; }
+        ~MyVector() { delete[] data; _size = capacity = 0; }
+        int size() { return this->_size; }
+
+        void push_back(const T& value) {
+            if(_size == capacity) ensureCapacity();
+            data[_size] = value;
+            _size ++;
+            std::cout << value << " Inserted" << std::endl;
+        }
+        void ensureCapacity() {
+            std::cout << "ensureCapacity() from " << capacity << " to " << (capacity * 2 + 1) << std::endl;
+            T* new_data = new T[capacity * 2 + 1];
+            std::copy(data, data+capacity, new_data);
+            delete[] data;
+            capacity = capacity * 2 + 1;
+            data = new_data;
+        }
+
+        class Iterator {
+        public:
+            Iterator() : current{nullptr} {}
+            Iterator(T* current) : current{current} {}
+            bool operator!=(const Iterator& rhs) { return current != rhs.current; }
+            T& operator*() const { return *(this->current); }
+            Iterator& operator++() { current ++; return *this; } // prefix
+
+        private:
+            T* current;
+
+        };
+
+        class ConstIterator {
+        public:
+            ConstIterator(T* current) : current{current} {}
+            bool operator!=(const ConstIterator& rhs) { return this->current != rhs.current; }
+            const T& operator*() { return *(this->current); }
+            ConstIterator& operator++() { current ++; return *this; } // prefix
+
+        private:
+            T* current;
+
+        };
+
+
+        Iterator begin() { return Iterator(data); }
+        Iterator end() { return Iterator(data + _size); }
+        const ConstIterator cbegin() const { return ConstIterator(data); }
+        const ConstIterator cend() const { return ConstIterator(data + _size); }
+    };
+}
+
+int main() {
+    zvi::MyVector<int> vec;
+    for(int i=0; i<50; i++) vec.push_back(i);
+    std::cout << "*******************************************" << std::endl;
+    for(auto ptr = vec.begin(); ptr != vec.end(); ++ptr) { std::cout << *ptr << " " ; *ptr = 5; } // Mutable (Read and Write)
+    std::cout << std::endl;
+
+    // for(auto ptr = vec.cbegin(); ptr != vec.cend(); ++ptr) { *ptr = 5; } // Compiler Error - Immutable ( Read Only)
+    for(auto& r : vec) { std::cout << r << std::endl; } // Since there begin and end
+    return 0;
+}

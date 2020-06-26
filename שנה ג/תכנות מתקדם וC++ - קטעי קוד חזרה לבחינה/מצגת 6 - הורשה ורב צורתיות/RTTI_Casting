@@ -1,0 +1,59 @@
+#include <vector>
+#include <string>
+#include <iostream>
+
+/** Written By Zvi Mints - zvimints@gmail.com **/
+/** Powerpoint 6 **/
+
+
+struct A {
+    virtual void foo(int x = 3) { std::cout << "A foo(int)" << std::endl; }
+};
+
+
+struct B : A {
+    void foo(int x = 3) override { std::cout << "B foo(int)" << std::endl; }
+    void bar() { A::foo(); std::cout << "In Bar" << std::endl; }
+};
+struct C : A {};
+
+int main() {
+    A a; // A() ~A()
+    B b; // A() A() B() 16 ~B() ~A() ~A()
+    std::cout << sizeof(a) << std::endl; // 8
+    std::cout << sizeof(b) << std::endl; // 16
+
+
+    // Tree: A -> B
+    // UpCasting: -> The Father Class is First (Father father = Son)
+    A* upcasting_pointer = &b;
+    A& upcasting_reference = b;
+
+    // DownCasting: -> The Son Class is First (Son son = father)
+    // B* downcasting_pointer = &a; // compiler error
+    // B& downcasting_reference = a; // compiler error
+
+    // Casting:
+    B* downcasting_pointer = (B*) &a;
+    downcasting_pointer->bar(); // In bar
+
+    A* upcasting_casting_pointer = (A*) &b;
+    // upcasting_casting_pointer->bar(); // error
+
+    // PureVirtual:
+    class Decease {
+        virtual void Isolation(int) = 0;
+    };
+    class Corona : Decease { virtual void Isolation(int) override { std::cout << "2 Meters" << std::endl; }};
+
+    Corona* c = new Corona();
+
+    // RTTI - Run-time Type Identification (know in runtime the type of the object)
+    // dynamic-cast - We can use dynamic_cast to get type information
+    A* ab = new B();
+    A* ac = new C();
+    std::cout << (dynamic_cast<B*>(ab) ? "B* Type" : "nullptr") << std::endl; // B* type
+    std::cout << (dynamic_cast<C*>(ab) ? "B* Type" : "nullptr") << std::endl; // nullptr
+    return 0;
+}
+

@@ -1,0 +1,25 @@
+#include <vector>
+#include <string>
+#include <iostream>
+
+/** Written By Zvi Mints - zvimints@gmail.com **/
+/** Powerpoint 5 **/
+
+struct MyException : std::exception {
+
+    MyException(std::string error) : m_error{error} {}
+    ~MyException() throw() {}
+    virtual const char* what() const throw() { return m_error.c_str(); }
+
+private:
+    std::string m_error;
+    const char* getMessage() { return "Corona"; }
+};
+
+int main() {
+    try {
+        throw MyException("MyException Message");
+    }
+    catch(const std::exception& ex) { std::cerr << ex.what() << std::endl; }
+    return 0;
+}

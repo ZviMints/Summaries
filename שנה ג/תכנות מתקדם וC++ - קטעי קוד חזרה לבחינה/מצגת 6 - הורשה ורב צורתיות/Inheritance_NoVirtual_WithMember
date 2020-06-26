@@ -1,0 +1,44 @@
+#include <vector>
+#include <string>
+#include <iostream>
+
+/** Written By Zvi Mints - zvimints@gmail.com **/
+/** Powerpoint 6 **/
+
+
+struct A {
+    A() { std::cout << "A()" << std::endl; }
+
+    A(const A &other) { std::cout << "A(A& Other)" << std::endl; }
+
+    A &operator=(const A &other) { std::cout << "A(= Operator)" << std::endl; }
+
+    virtual ~A() { std::cout << "~A()" << std::endl; }
+
+    virtual void foo(int x = 3) { std::cout << "A foo(int)" << std::endl; }
+};
+
+
+struct B : A {
+    A a;
+
+    B() { std::cout << "B()" << std::endl; }
+
+    B(const B &other) { std::cout << "B(B& Other)" << std::endl; }
+
+    B &operator=(const B &other) { std::cout << "B(= Operator)" << std::endl; }
+
+    ~B() { std::cout << "~B()" << std::endl; }
+
+    void foo(int x = 3) override { std::cout << "B foo(int)" << std::endl; }
+
+};
+
+int main() {
+    A a; // A() ~A()
+    B b; // A() A() B() 16 ~B() ~A() ~A()
+    std::cout << sizeof(a) << std::endl; // 8
+    std::cout << sizeof(b) << std::endl; // 16
+    return 0;
+}
+

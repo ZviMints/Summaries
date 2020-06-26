@@ -1,0 +1,31 @@
+#include <iostream>
+#include <vector>
+
+/** Written By Zvi Mints - zvimints@gmail.com **/
+/** Powerpoint 5 **/
+
+struct A {
+    // explicit
+    A(int)  { std::cout << "In A(int)" << std::endl; }
+    A(int,int) { std::cout << "In A(int,int)" << std::endl; }
+    // A(const A& other) = delete;
+    // A& operator=(const A& other) = delete;
+
+};
+
+int main() {
+    A a1(1,2); // In A(int,int)
+    int problem_why_need_explicit = 5;
+
+    /** This is undefined behavior **/
+    // Note: if A(const A& other) = delete; then there will be compiler error
+    A a2 = problem_why_need_explicit; // In A(int)
+
+    A a3(0); // In A(int,int)
+    // Note: if A& operator=(const A& other) = delete; then there will be compiler error
+    a3 = problem_why_need_explicit;
+
+    // To solve the undefined behavior:
+    // Change to explicit A(int) { ... }
+    return 0;
+}
