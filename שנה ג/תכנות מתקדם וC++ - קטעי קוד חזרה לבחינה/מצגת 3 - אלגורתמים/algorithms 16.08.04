@@ -1,0 +1,144 @@
+#include <vector>
+#include <algorithm>
+#include <array>
+#include <iostream>
+#include <functional>
+#include <string>
+
+/** Written By Zvi Mints - zvimints@gmail.com **/
+/** Powerpoint 3 **/
+bool isShorted(const std::string& s1, const std::string& s2) { return s1.size() < s2.size(); }
+
+// For Printing:
+template <typename Type>
+std::ostream& operator<<(std::ostream& out, std::vector<Type> vec) {
+    for(const auto& ref: vec) out << ref << " ";
+    return out;
+}
+
+int main() {
+
+    // ================ copy ================ [V]
+    std::vector<int> _copy(4);
+    std::vector<int> _copied{1,2,3};
+    std::copy(_copied.begin(),std::end(_copied),_copy.begin()); // 1 2 3 0, Note if copy was without(4) then it will not work!
+    // Deep Copy
+    std::cout << _copy << std::endl; //  1 2 3 0
+
+    int arr[] = {0,1,2,3,4,5,6};
+    int newArray[sizeof(arr)/sizeof(*arr)];
+    std::copy(std::begin(arr),std::end(arr),newArray);
+    std::cout << std::endl << std::vector<int>(std::begin(newArray),std::end(newArray)) << std::endl; // 0 1 2 3 4 5 6
+
+    // ================ copy-if ================ [V]
+    std::vector<int> _copy_if{-1,0,1,2,3,4,5,6,7,8};
+    std::vector<int> new_copy_if(_copy_if.size());
+    auto res = std::copy_if(_copy_if.cbegin(),_copy_if.cend(),new_copy_if.begin(),[](const int& ref){ return (ref % 2 == 0); });
+    std::cout << new_copy_if << " with pointer to: " << *res <<  std::endl; // 0 2 4 6 8 0 0 0 0 0  with pointer to: 0
+
+    // ================ count ================ [V]
+    std::vector<int> _count{-1,2,3,4,5,5,5,5,5,5,5,5,6};
+    std::cout << std::count(_count.cbegin(),_count.cend(),5) << std::endl; // 8
+    std::cout << std::count(_count.cbegin(),_count.cend(),555) << std::endl; // 0
+    // ================ count-if ================ [V]
+    assert(std::count_if(_count.cbegin(),
+                          _count.cend(),
+                          [_count](const int& ref) { return (ref >= *std::min_element(_count.begin(), _count.end())); })
+            == _count.size());
+    // ================ replace ================ [V]
+    std::vector<int> _replace{1,2,1};
+    std::replace(_replace.begin(),_replace.end(),1,2);
+    std::cout << _replace << std::endl; // 2 2 2
+    std::replace(_replace.begin(),_replace.end(),3,4); // Do nothing
+
+    // ================ replace_copy ================ [V]
+    // leave the original sequence unchanged
+    std::vector<int> _replace_copy{1,2,1};
+    std::vector<int> new_replace_copy(3); // must have enough space!
+    std::replace_copy(_replace_copy.cbegin(),_replace_copy.cend(),new_replace_copy.begin(),1,2);
+    std::cout << _replace_copy << std::endl; // 1 2 1
+    std::cout << new_replace_copy << std::endl; // 2 2 2
+
+    // ================  find ================ [V]
+    std::vector<int> _find {-1,0,1,2,4,5,6,7,9};
+    int key = 42;
+    auto find_res = find(_find.begin(),_find.end(),key);
+    std::cout << ((find_res == _find.cend()) ? "not found" : std::to_string(*find_res)) << std::endl;
+
+    // ================  find-if ================ [V]
+    std::vector<int> _find_if {-1,0,1,2,4,5,6,7,9};
+    auto find_if_res = std::find_if(_find_if.begin(),_find_if.end(),[](const int& ref){ return ref > 0; });
+    std::cout << ((find_if_res == _find_if.cend()) ? "not found" : std::to_string(*find_if_res)) << std::endl; // 1
+
+    // ================ unique ================ [V]
+    std::vector<int> _unique{-1,0,1,2,2,2,2,2,2,2,3,4};
+    auto end_unique = unique(_unique.begin(), _unique.end());
+    std::cout << *end_unique << std::endl; // 2 - and returns an iterator one past the last unique element
+    std::cout << _unique << std::endl; // -1 0 1 2 3 4 |-> 2 2 2 2 3 4
+    // |
+    // ----> ================ erase =================== [V]
+    _unique.erase(_unique.erase(end_unique),_unique.end());
+    std::cout << _unique << std::endl; // -1 0 1 2 3 4
+
+    // ================ equal ================ [V]
+    std::vector<int> v1_equal {-1,1};
+    // std::vector<int> v2_equal {-1,1}; // true
+    std::vector<int> v2_equal {-1,1,3}; // true
+    std::cout << ( (std::equal(v1_equal.cbegin(),v1_equal.cend(), v2_equal.cbegin()) == 1) ? "true" : "false") << std::endl;
+    // If its was object (not string, string is true) its was throwing the following exception:
+    // error: invalid operands to binary expression ('const Person' and 'const Person') - compiler error
+    // cause its based on '==' operator
+    // to fix: (added the operator ==)
+    struct Person { int* ptr; Person() : ptr{new int[0]} {} ~Person() { delete[] ptr; }
+    bool operator==(const Person& rhs) const { this->ptr == rhs.ptr; }
+    };
+    std::vector<Person> v1_not_equal {Person(),Person()};
+    std::vector<Person> v2_not_equal {Person(),Person()};
+    std::cout << ( (std::equal(v1_not_equal.cbegin(),v1_not_equal.cend(), v2_not_equal.cbegin()) == 1) ? "true" : "false") << std::endl; // false
+
+    // ================ accumulate ================ [X]
+    std::vector<int> _accumulate{-1,2,3,4,5,6};
+    // int sum = accumulate(_accumulate.cbegin(), _accumulate.cend(), 0); (default operator +)
+
+
+    // ================ sort (default by operator <) ================ [V]
+    std::vector<std::string> _sort{"Zvi", "Mints", "C++", "Pizza","LongWord","A"};
+    bool (*sorting_function)(const std::string &, const std::string &) = &isShorted; // pointer to a function (string,string)->bool
+    std::sort(_sort.begin(),_sort.end() - 1,*sorting_function); // Zvi C++ Mints Pizza LongWord A
+    // Same as:
+    // std::sort(_sort.begin(),_sort.end() - 1,[](const std::string& s1, const std::string& s2){ return s1.size() < s2.size(); }); // Zvi C++ Mints Pizza LongWord A
+    std::cout << _sort << std::endl;
+
+    // *************** Insert Iterators ***************** //
+    /**
+     * אם אין מספיק איברים במיכל שאליו רוצים להעתיק או שהמיכל ריק, אפשר להשתמש ב- Insert Iterators - איטרטורים שמוסיפים איברים למיכל ומעתיקים לתוכם.
+      push_back -יוצר אוביקט שמתנהג כמו איטרטור ומשתמש ב back_inserter push_front -יוצר איטרטור שמשתמש ב front_inserter insert -יוצר איטרטור שמשתמש ב inserter
+     */
+    std::vector<int> ex1,ex2,ex3,ex4;
+    std::vector<int> source {1,2,3,4,5,6,7,7,7};
+    // ex1:
+    std::unique_copy(source.begin(),source.end(),std::back_inserter(ex1));
+    std::cout << ex1 << std::endl; // 1 2 3 4 5 6 7
+    // ex2:
+    // Error! there no front_inserter for std::vector!
+    //std::replace_copy(source.begin(),source.end(),std::front_inserter(ex2),7,8);
+    // std::cout << ex2 << std::endl;
+
+    // ex3:
+    std::replace_copy(source.begin(),source.end(),std::inserter(ex3,ex3.begin()),7,8);
+    std::cout << ex3 << std::endl; // 1 2 3 4 5 6 8 8 8
+
+    // ex4:
+    std::copy(source.begin(),source.end(),std::back_inserter(ex4));
+    std::cout << ex4 << std::endl; // 1 2 3 4 5 6 7 7 7
+
+
+    // ================ Wrapper (Not Part of Algorithms) ================
+    struct Wrapper {
+        int operator()(int value) const { return (value < 0) ? - value : value; }
+    };
+    Wrapper wrapper;
+    std::cout << wrapper(-5) << std::endl;
+
+    return 0;
+}

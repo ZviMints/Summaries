@@ -1,0 +1,43 @@
+#include <vector>
+#include <string>
+#include <iostream>
+
+/** Written By Zvi Mints - zvimints@gmail.com **/
+/** Powerpoint 3 **/
+#include "Declarations.h"
+
+template <typename F>
+void f(F& fun) { std::cout << "F& fun: " << type_name<decltype(fun)>() << std::endl; } // type_name is function in Declarations.h
+
+
+template <typename F>
+void f(F&& fun) { std::cout << "F&& fun: " << type_name<decltype(fun)>() << std::endl; } // type_name is function in Declarations.h
+int main() {
+
+
+    const int _const = 0;
+    f(_const); // F& fun: int const&
+    f(3); // F&& fun: int&&
+    f( 1 + 2); // F&& fun: int&&
+    // Lambda: [capture list](args){function body}
+    // [_const](const int& current){ return current >= _const; }
+    // [](const std::string& current){ std::cout << current << std::endl; }
+    f([_const](const int& current){ return current >= _const; }); // Via Fun&&
+
+    // Passing & in Capture List
+    // Note: the only way to capture ostream is by reference
+    std::vector<int> v1{1,2,3};
+    const int changeto = 1;
+    std::for_each(v1.begin(),v1.end(),[&changeto](int& current) { current = changeto; });
+    std::for_each(v1.begin(),v1.end(),[](const int& ref){std::cout << ref << " ";}); // 1 1 1
+    std::cout << std::endl;
+
+    // Aggregation
+    int sum = 0;
+    std::for_each(v1.begin(),v1.end(),[&sum](const int& current){sum += current; });
+    std::cout << sum << std::endl; // 3
+
+    return 0;
+}
+
+

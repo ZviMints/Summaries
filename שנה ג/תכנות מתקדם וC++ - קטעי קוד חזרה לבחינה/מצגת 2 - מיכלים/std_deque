@@ -1,0 +1,71 @@
+#include <vector>
+#include <string>
+#include <iostream>
+#include <deque>
+#include <deque>
+
+/** Written By Zvi Mints - zvimints@gmail.com **/
+/** Powerpoint 3 **/
+int main() {
+    /**
+זמן הכנסה בהתחלה/אמצע/סוף הוא קבוע, אבל זמן הגישה לאיבר באמצע הרשימה הוא לינארי
+גישה סדרתית בלבד, הוספה ומחיקה מהירה בכול מקום ברשימה
+     [V] Insert & Emplace (With Iterator)
+     [V] push_back & Emplace_back & push_front (Without Iterator)
+     // Random Access!
+     // [V] pop_back, pop_front
+     */
+
+    std::deque<int> nulldeque; // Initialize Empty
+    printf("%s \n",nulldeque.size()); // (null)
+
+    std::deque<int> deque_10(10);
+    std::for_each(deque_10.begin(),deque_10.end(),[](const int& ref){std::cout << ref << " "; }); // 0 0 0 0 0 0 0 0 0 0
+    std::cout << std::endl << deque_10.size() << std::endl; // 10
+
+    std::deque<int> deque{1,2,3,4};
+    std::cout << deque.size() << std::endl; // 4
+    deque.push_back(5);
+    std::for_each(deque.begin(),deque.end(),[](const int& ref){std::cout << ref << " "; }); // 1 2 3 4 5
+    std::cout << std::endl << deque.size() << std::endl; // 5
+
+    // Passing on deque
+    for(std::deque<int>::size_type index = 0; index < deque.size(); index++) { };
+    for(decltype(deque.size()) index = 0; index < deque.size(); index++) { };
+    for(auto& ref: deque) {};
+    for(std::deque<int>::const_iterator it = deque.cbegin(); it != deque.cend(); ++it) { std::cout << *it << std::endl; };
+    for(std::deque<int>::iterator it = deque.begin(); it != deque.end(); ++it) { std::cout << *it << std::endl; };
+
+    // Insertions:
+    std::deque<int> test(3);
+
+    // push_back
+    test.push_back(1);
+    std::for_each(test.begin(),test.end(),[](const int& ref){std::cout << ref << " "; }); // 0 0 0 1
+    std::cout << std::endl;
+
+    // insert
+    test.insert(test.begin(),-2);
+    test.insert(test.end(),2);
+    // test.insert(test.begin() + 1, -1); // Throws, instead move the iterator to the place you want to
+    std::for_each(test.begin(),test.end(),[](const int& ref){std::cout << ref << " "; }); // -2 -1 0 0 0 1 2
+    std::cout << std::endl;
+
+    // emplace - construct the object in vector
+    test.emplace_back(3); // can be person object
+    //test.emplace("314977489","zvi-mints") // is equiv to test.push_back(Person("314977489,"zvi-mints"))
+    test.emplace(test.end(),4);
+    std::for_each(test.begin(),test.end(),[](const int& ref){std::cout << ref << " "; }); // -2 -1 0 0 0 1 2 3 4
+    std::cout << std::endl;
+
+    //push_front
+    test.push_front(-3);
+    std::for_each(test.begin(),test.end(),[](const int& ref){std::cout << ref << " "; }); // -3 -2 -1 0 0 0 1 2 3 4
+    std::cout << std::endl;
+
+    std::cout << test[3] << std::endl; // 0
+    std::cout << test[100] << std::endl; // default value
+    test.pop_back();
+    test.pop_front();
+    return 0;
+}

@@ -1,0 +1,59 @@
+#include <vector>
+#include <string>
+#include <iostream>
+
+/** Written By Zvi Mints - zvimints@gmail.com **/
+/** Powerpoint 3 **/
+int main() {
+    /**
+זמן הכנסה בהתחלה/אמצע הוא לינארי, זמן הכנסה בסוף קבוע בבממוצע, וזמן גישה לאיבר באמצע הוא קבוע
+גישה אקראית מהירה, הוספה ומחיקה מהירה בסוף הווקטור
+     [V] Insert & Emplace (With Iterator)
+     [V] push_back & Emplace_back (Without Iterator)
+     [X] push_front
+     */
+
+    std::vector<int> nullVector; // Initialize Empty
+    printf("(%s,%s) \n",nullVector.size(),nullVector.capacity()); // (null,null)
+
+    std::vector<int> vector_10(10);
+    std::for_each(vector_10.begin(),vector_10.end(),[](const int& ref){std::cout << ref << " "; }); // 0 0 0 0 0 0 0 0 0 0
+    std::cout << vector_10.capacity() << " " << vector_10.size() << std::endl; // 10 10
+
+    std::vector<int> vec{1,2,3,4};
+    std::cout << vec.capacity() << " " << vec.size() << std::endl; // 4 4
+    vec.push_back(5);
+    std::for_each(vec.begin(),vec.end(),[](const int& ref){std::cout << ref << " "; }); // 1 2 3 4 5
+    std::cout << std::endl << vec.capacity() << " " << vec.size() << std::endl; // 8 5
+
+    // Passing on vector
+    for(std::vector<int>::size_type index = 0; index < vec.size(); index++) { };
+    for(decltype(vec.size()) index = 0; index < vec.size(); index++) { };
+    for(auto& ref: vec) {};
+    for(std::vector<int>::const_iterator it = vec.cbegin(); it != vec.cend(); ++it) { std::cout << *it << std::endl; };
+    for(std::vector<int>::iterator it = vec.begin(); it != vec.end(); ++it) { std::cout << *it << std::endl; };
+
+    // Insertions:
+    std::vector<int> test(3);
+
+    // push_back
+    test.push_back(1);
+    std::for_each(test.begin(),test.end(),[](const int& ref){std::cout << ref << " "; }); // 0 0 0 1
+    std::cout << std::endl;
+    // insert
+    test.insert(test.begin(),-2);
+    test.insert(test.end(),2);
+    test.insert(test.begin() + 1, -1);
+    std::for_each(test.begin(),test.end(),[](const int& ref){std::cout << ref << " "; }); // -2 -1 0 0 0 1 2
+    std::cout << std::endl;
+
+    // emplace - construct the object in vector
+    test.emplace_back(3); // can be person object
+    //test.emplace("314977489","zvi-mints") // is equiv to test.push_back(Person("314977489,"zvi-mints"))
+    test.emplace(test.end(),4);
+    std::for_each(test.begin(),test.end(),[](const int& ref){std::cout << ref << " "; }); // -2 -1 0 0 0 1 2 3 4
+    std::cout << std::endl;
+
+    // [X] NO push_front
+    return 0;
+}
