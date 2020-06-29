@@ -1,0 +1,177 @@
+#include <iostream>
+
+using namespace std;
+
+#include <regex>
+#include <algorithm>
+#include <vector>
+
+/**
+ * Zvi Mints
+ * @return Some Regex Knowledge
+ */
+
+std::ostream& operator<<(std::ostream& os, std::vector<int> vec) {
+ for (const auto& ref: vec) os << ref << " ";
+ return os;
+}
+
+int main() {
+    // * - zero or more (string)*
+    // + - one or more (string)+
+    // {n} - (string){n} = string....string total n times
+    // {n,m} - (string){n,m} = string...string total at most m times and at least n times [n,m]
+    std::cout << boolalpha << regex_match("ab", regex("[ab]{1,3}")) << regex_match("abbb", regex("[ab]{1,3}"))
+              << std::endl; // true false
+
+    // Match the whole string:
+    std::cout << boolalpha << regex_match("abc", regex("abc")) << std::endl; // true
+    std::cout << boolalpha << regex_match("abc", regex("abd")) << std::endl; // false
+
+    // Match one letter:
+    std::cout << boolalpha << regex_match("abc", regex("[abc]")) << std::endl; // false
+    std::cout << boolalpha << regex_match("a", regex("[abc]")) << std::endl; // true
+
+    // \D - (no digit), \d - digit, \W - no word, \w - word, \S - no space, \s - space
+    std::cout << boolalpha << regex_match("8", regex("\\d")) << std::endl; // true
+    std::cout << boolalpha << regex_match("8", regex(R"(\d)")) << std::endl; // same as above
+    std::cout << boolalpha << regex_match("-41", regex("-*\\d+")) << std::endl; // true (+ is one or more)
+    std::cout << boolalpha << regex_match(" ", regex("\\s")) << std::endl; // true
+    std::cout << boolalpha << regex_match("  ", regex("\\s")) << std::endl; // false
+    std::cout << boolalpha << regex_match("zvi", regex("\\s")) << std::endl; // false
+    std::cout << boolalpha << regex_match("zvi", regex(R"(\W)")) << std::endl; // false
+    std::cout << boolalpha << regex_match("z", regex(R"(\w)")) << std::endl; // true
+    std::cout << boolalpha << regex_match("zvi", regex(R"((\w)*)")) << std::endl; // true
+    std::cout << boolalpha << regex_match("1", regex(R"(\w)")) << std::endl; // true
+    std::cout << boolalpha << regex_match("C++", regex(R"(C\+\+)")) << std::endl; // true
+    std::cout << boolalpha << regex_match("C++", regex("C\\+\\+")) << std::endl; // true
+
+    // - in regex
+    std::cout << boolalpha << regex_match("zVi", regex("[a-z][A-Z][a-z]")) << std::endl; // true
+
+
+    // note: special regex meta char (12) - $,(,),*,
+    //                                      +,.,?,[,
+    //                                      \^{|
+
+    // match any character (.)
+    std::cout << boolalpha << regex_match("zvi\nmints", regex("(.)*")) << std::endl; // true
+    std::cout << boolalpha << regex_match("zvi\nmints", regex(R"([\S\s]*)")) << std::endl; // true
+
+    // date
+    std::cout << boolalpha << regex_match("25.10.95", regex(R"(\d\d[-/.]\d\d[-/.]\d\d)")) << std::endl; // true
+
+    // ? in the end - (op)? zero or once
+    std::cout << boolalpha << regex_match("color", regex("colou?r")) << std::endl; // true
+    std::cout << boolalpha << regex_match("colour", regex("colou?r")) << std::endl; // true
+    std::cout << boolalpha << regex_match("colour", regex("colo(u)?r")) << std::endl; // true
+
+    // lazy vs greedy
+    // ---- greedy:
+    smatch greedy_res;
+    std::string text = "<zvi>some_cool_text</zvi>";
+    regex_search(text, greedy_res, regex("<.+>")); // cant get r-value
+    std::cout << boolalpha << greedy_res.prefix() << " " << greedy_res[0] << " " << greedy_res.suffix() << std::endl; // <space> <zvi>some_cool_text</zvi> <space>
+
+    // ---- lazy:
+    smatch lazy_res;
+    regex_search(text, lazy_res, regex("<.+?>")); // cant get r-value
+    std::cout
+    << " prefix:" << lazy_res.prefix() //  nothing
+    << " res[0]: " << lazy_res[0] // zvi
+    << " res[1]: " << lazy_res[1] // nothing - match the first one
+    << " suffix:"  << lazy_res.suffix() // some_cool_text</zvi>
+    << std::endl; //
+
+    // ---- can be also used greedy that way:
+    std::cout << boolalpha << regex_match("<zvi>some_cool_text</zvi>", regex("<[^>]+>")) << std::endl; // false
+    std::cout << boolalpha << regex_match("<zvi>", regex("<[^>]+>")) << std::endl; // true
+
+    // not - in regex (^) [ only if its in '[]' ] !!
+    std::cout << boolalpha << regex_match("ae", regex("[^aeiouy]")) << std::endl; // false
+    std::cout << boolalpha << regex_match("a", regex("[^aeiouy]")) << std::endl; // false
+    std::cout << boolalpha << regex_match("b", regex("[^aeiouy]")) << std::endl; // true
+    std::cout << boolalpha << regex_match("^", regex("[a^eiouy]")) << std::endl; // true
+    std::cout << boolalpha << regex_match("F9", regex("[^a-fA-F0-9]")) << std::endl; // no hexa - false
+
+    // starts with - in regex (^)
+    std::cout << boolalpha << regex_match("<zvi>some_cool_text</zvi>", regex("^<zvi>(.)*")) << std::endl; // true
+    std::cout << boolalpha << regex_match("f<zvi>some_cool_text</zvi>", regex("^<zvi>(.)*")) << std::endl; // false
+
+    // end with - in regex ($)
+    std::cout << boolalpha << regex_match("<zvi>some_cool_text</zvi>", regex("((.)*(</zvi>)$)")) << std::endl; // true
+    std::cout << boolalpha << regex_match("<zvi>some_cool_text</zvi>", regex("((.)*(<zvi>)$)")) << std::endl; // false
+
+    // equal
+    std::cout << boolalpha << regex_match("abc", regex("abc")) << std::endl; // true
+    std::cout << boolalpha << regex_match("abc", regex("^abc$")) << std::endl; // true
+
+    // match an empty line
+    std::cout << boolalpha << regex_match("", regex("^$")) << std::endl; // true
+
+    // match whole word
+    smatch whole_word,whole_word_with_slash_b;
+    std::string zvi_text = "prefixzvi zvi zvi zvi zvizvisuffix";
+    while (regex_search(zvi_text, whole_word, regex(R"(zvi)"))) {
+        for (auto x:whole_word) std::cout << x << " "; // zvi zvi zvi zvi zvi zvi
+        zvi_text = whole_word.suffix().str();
+    }
+    std::cout << std::endl;
+    zvi_text = "prefixzvi zvi zvi zvi zvizvisuffix";
+    while (regex_search(zvi_text, whole_word_with_slash_b, regex(R"(\bzvi\b)"))) {
+        for (auto x:whole_word_with_slash_b) std::cout << x << " "; // zvi zvi zvi
+        zvi_text = whole_word_with_slash_b.suffix().str();
+    }
+    std::cout << std::endl;
+
+    // do \1 for the previus match
+    std::cout << boolalpha << regex_match("10-10", regex("(\\d\\d)-\\1")) << std::endl; // true
+    std::cout << boolalpha << regex_match("10-11", regex("(\\d\\d)-\\1")) << std::endl; // false
+
+    // match html tag - <([A-Z][A-Z0-9]*)[^>]*>.*?</\1>
+    // check for double words - \b(\w+)\s+\1\b
+
+    // Pipe
+    std::cout << boolalpha << regex_match("A", regex("\\b(A|B)\\b")) << std::endl; // true
+
+
+    // regex_match
+    // input: (string,regex)
+    // output: bool
+
+    // regex_search
+    // input: (string, smatch, regex)
+    // output: (prefix,match[0], suffix) -> then iterator as follows:
+    for (auto x:whole_word) std::cout << x << " "; // zvi zvi zvi zvi zvi zvi
+    zvi_text = whole_word.suffix().str();
+
+    // regex_replace
+    // input: (string,regex, what to change format)
+    string input {"x 1 y2 22 zaq 34567"};
+    regex pat {R"((\w+)\s(\d+))"}; // word space number
+    string format {"\n{\ntotal=$0\n$1\n$2\n}"};
+    cout << regex_replace(input,pat,format) << std::endl; // {x 1,x 1,x} {y2 22,y2 22,y2} {zaq 34567,zaq 34567,zaq}
+    cout << input << std::endl; // not changed - x 1 y2 22 zaq 34567
+
+
+    std::string new_text = "AAABBBCCC";
+    pat = std::regex{ "((A{2})(.*)(C{2}))" };
+    new_text = std::regex_replace(new_text, pat, R"($2-$1-$3-$0)");
+    std::cout << new_text << std::endl;
+
+
+
+
+    // sregex_iterator
+    string str = "zvi zvi zvi zvi zvi zvi";
+    sregex_iterator pos(str.cbegin(),str.cend(),regex{"zvi"});
+    sregex_iterator end ;; // default constructor for past-the-end iterator
+    for(; pos != end; ++pos) {
+        std::cout << "Matched: " << pos->str() << std::endl;
+        std::cout << "Position: " << pos->position() << std::endl;
+    }
+    std::cout << "Found: " << distance(pos,end) << std::endl;
+
+
+
+};
