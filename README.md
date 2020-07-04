@@ -26,7 +26,7 @@ https://github.com/ZviMints/Number-Theory--NT-5779B
 - `סיכום מההרצאות - גרפים בבדידה` <br>
 סיכום החלק האחרון של הקורס אשר מתמקד בגרפים עם כל ההוכחות אשר נלמדו בשיעור
 - מערכי תרגול לקורס `מבני נתונים` עם תרגילים פתרונות
-- מרתון טרום מבחנים במבני נתונים: https://www.youtube.com/watch?v=x8HcgVSVnvI&list=PLskc-ZNWyaRoPa2QLYmrF2ffYmVLPdOS2 
+- מרתון טרום מבחנים במבני נתונים: https://drive.google.com/file/d/1CBBaXCUzXK3iOjaYRms6oRGquZR5a-o4/view 
 - מערכי תרגול לקורס `תורת המספרים` עם תרגילים ופתרונות
 
 
