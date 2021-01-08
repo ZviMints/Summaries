@@ -1,0 +1,37 @@
+import scala.annotation.tailrec
+
+// foldLeft
+def foldLeft[F,T](xs: Seq[F], init: T)(op: (T,F) => T): T = {
+  @tailrec
+  def _foldLeft(acc: T)(xs: Seq[F]): T = xs match {
+    case Nil => acc
+    case head :: tail => _foldLeft(op(acc,head))(tail)
+  }
+  _foldLeft(init)(xs)
+}
+assert(foldLeft(List(1,2,3), 0)(_ + _) == 1 + 2 + 3)
+
+// String replace
+def replace(s: String, from: Char, to: Char): String = {
+  @tailrec
+  def _replace(acc: List[Char])(xs: List[Char]): List[Char] = xs match {
+    case Nil => acc.reverse
+    case `from` :: tail => _replace(to :: acc)(tail)
+    case  char :: tail => _replace(char :: acc)(tail)
+  }
+  _replace(Nil)(s.toCharArray.toList).mkString
+}
+assert(replace("zvi Mints", 'z', 'Z') == "Zvi Mints")
+
+// map
+def map[A,B](xs: List[A])(f: A => B): List[B] = for { x <- xs } yield f(x)
+
+// filter
+def filter[A](xs: List[A], f: A => Boolean): List[A] = {
+  def _filter(acc: List[A])(xs: List[A]): List[A] = xs match {
+    case Nil => acc.reverse
+    case head:: tail => if(f(head)) _filter(head :: acc)(tail) else _filter(acc)(tail)
+  }
+  _filter(Nil)(xs)
+}
+assert(filter(List(1,2,3), (num: Int) => num == 2) == List(2))
